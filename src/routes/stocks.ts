@@ -3,8 +3,7 @@ import { Request, Response } from "express"
 const router = express.Router();
 import tradesModel from "../models/trades"
 
-// ​/stocks/stats?start={startDate}&end={endDate}​
-// ​/stocks/{stockSymbol}/price?start={startDate}&end={endDate}​
+// Returning the highest and lowest price for the stock symbol in the given date range
 router.get("/:symbol/price", async (req: Request, res: Response) => {
   let { symbol } = req.params;
   let { startDate, endDate } = req.query;
@@ -22,7 +21,11 @@ router.get("/:symbol/price", async (req: Request, res: Response) => {
   }
 })
 
-
+// Returning the fluctuations count, maximum daily rise and maximum daily fall for each stock symbol for the period in the given date range
+router.get("/stats", async (req: Request, res: Response) => {
+  let { start, end } = req.query;
+  return res.send({})
+})
 
 export default router
 
