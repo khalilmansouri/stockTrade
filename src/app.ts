@@ -1,70 +1,75 @@
-import Boom from '@hapi/boom';
+// import Boom from '@hapi/boom';
 import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
+// import cookieParser from 'cookie-parser';
 import express from 'express';
-import expressPinoLogger from 'express-pino-logger';
+// import expressPinoLogger from 'express-pino-logger';
 import path from 'path';
 import pino from 'pino';
-import { indexRouter } from './routes';
+// import { indexRouter } from './routes';
 import erase from "./routes/erase"
 import trades from "./routes/trades"
 import stocks from "./routes/stocks"
+import mongoose from "mongoose"
 
 const logger = pino({});
 const app = express();
 const port = 8080;
 
-require("./database")
+// require("./database")
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+mongoose.connection.once('open', function () {
+    console.log('MongoDB event open');;
 
-app.use(bodyParser.json());
+    mongoose.connection.on('connected', function () {
+        console.log('MongoDB event connected');
+    });
+
+    mongoose.connection.on('disconnected', function () {
+        console.log('MongoDB event disconnected');
+    });
+
+    mongoose.connection.on('reconnected', function () {
+        console.log('MongoDB event reconnected');
+    });
+
+    mongoose.connection.on('error', function (err) {
+        console.log('MongoDB event error: ' + err);
+    });
+});
+
+
+
+
+
+app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use('/', indexRouter);
+// error handler
+app.use((err, req, res, next) => {
+    console.log(err)
+    res.sendStatus(err.status || 502)
+});
 
 app.use('/erase', erase);
 app.use('/trades', trades);
 app.use('/stocks', stocks);
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-    const err = Boom.notFound('Route not found');
-    next(err);
-});
+let server
 
-// error handler
-app.use((err, req, res, next) => {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+(async () => {
+    await mongoose.connect('mongodb://localhost:27017/test-todo', {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useUnifiedTopology: true,
+        poolSize: 100
+    })
+    console.log("Connected to db.");
+    server = app.listen(port, () => {
+        console.log(`Listening on port ${port}.`)
+        app.emit("ready");
+    });
+})();
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
-});
-
-
-app.addListener('error', (error) => {
-    if (error.syscall !== 'listen') {
-        throw error;
-    }
-    // handle specific listen errors with friendly messages
-    switch (error.code) {
-        case 'EADDRINUSE':
-            console.error(`${port} is already in use`);
-            process.exit(1);
-        default:
-            throw error;
-    }
-});
-
-
-let server = app.listen(port, () => logger.info(`Example app listening at http://localhost:${port}`))
-
-export { server };
+// const server = app.listen(port, () => logger.info(`Example app listening at http://localhost:${port}`))
+export { app, server }

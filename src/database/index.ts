@@ -23,6 +23,10 @@ class Connection extends EventEmitter {
     mongoose.set("useCreateIndex", true);
     mongoose.set("useNewUrlParser", true);
     mongoose.set("useUnifiedTopology", true);
+    // mongoose.set("reconnectTries", Number.MIN_VALUE)
+    // mongoose.set("autoReconnect", true)
+    // reconnectTries : Number.MAX_VALUE,
+    // autoReconnect : true
     this._connection = mongoose.createConnection();
     this._listen();
     this._connect();

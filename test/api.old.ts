@@ -1,7 +1,8 @@
 import fs from 'fs';
-import { server as app } from '../src/app';
+import app from '../src/app';
 
 import connection from "../src/database"
+import mongoose, { mongo } from "mongoose"
 
 const dir = './test/data/';
 const testFolder = './test/data';
@@ -31,7 +32,7 @@ const table: { [index: string]: ITest[] } = {};
 
 let i = 0;
 for (const file of files) {
-    if (file[0] !== '.' && file !== 'description.txt' && file !== "http02.json" && file !== "http01.json" && file !== "http03.json") {
+    if (file[0] !== '.' && file !== 'description.txt' && file !== "http03.json" && file !== "http01.json" && file !== "http00.json") { // && file !== "http03.json" && file !== "http03.json"
         let events;
         if (file[0] !== '.' && file !== 'description.txt') {
             events = fs.readFileSync(dir + file, 'utf8').toString().split('\n').map((line) => {
@@ -44,7 +45,7 @@ for (const file of files) {
     }
 }
 
-jest.setTimeout(120 * 1000);
+jest.setTimeout(30 * 1000);
 describe('Check Tests', () => {
 
     beforeAll(done => {
@@ -52,7 +53,8 @@ describe('Check Tests', () => {
     })
 
     afterAll(async done => {
-        await connection.close()
+        // await connection.close()
+        await mongoose.disconnect()
         await app.close()
         done()
     });

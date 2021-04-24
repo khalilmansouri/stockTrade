@@ -1,4 +1,5 @@
 import { Schema, Document } from 'mongoose';
+import mongoose from 'mongoose';
 import connection from "../database"
 
 export interface ITrade extends Document {
@@ -59,4 +60,4 @@ TradeSchema.index({ symbol: 1 })
 TradeSchema.index({ price: 1 })
 TradeSchema.index({ timestamp: 1 })
 
-export default connection.model<ITrade>("trades", TradeSchema);
+export default mongoose.model<ITrade>("trades", TradeSchema);

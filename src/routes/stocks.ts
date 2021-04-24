@@ -9,15 +9,15 @@ router.get("/:symbol/price", async (req: Request, res: Response) => {
   let { symbol } = req.params;
   let { startDate, endDate } = req.query;
   let symbols = await tradesModel.findOne({ symbol })
-  if (!symbols) res.sendStatus(404)
+  if (!symbols) return res.sendStatus(404)
   else {
     let max = await tradesModel.findOne({ symbol, timestamp: { $gte: startDate?.toString(), $lte: endDate?.toString() } }).sort({ price: 1 }).limit(1)
     let min = await tradesModel.findOne({ symbol, timestamp: { $gte: startDate?.toString(), $lte: endDate?.toString() } }).sort({ price: -1 }).limit(1)
     if (max && min) {
       res.status(400);
-      res.send({ message: "There are no trades in the given date range" })
+      return res.send({ message: "There are no trades in the given date range" })
     } else {
-      res.send({ lowest: min?.price, highest: max?.price, symbol })
+      return res.send({ lowest: min?.price, highest: max?.price, symbol })
     }
   }
 })

@@ -6,16 +6,19 @@ import tradesModel from "../models/trades"
 
 
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response, next) => {
+  // try {
   let tra = req.body
   const trade = await tradesModel.findOne({ id: tra.id })
-  // console.log(trade)
-  if (trade) res.status(400).send({})
+  if (trade) return res.sendStatus(400)
   else {
     await tradesModel.create(req.body)
-    // console.log(ret)
-    res.status(201).send({})
+    return res.status(201).send({})
   }
+  // } catch (error) {
+  //   next(error)
+  // }
+
 })
 
 
