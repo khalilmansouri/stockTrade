@@ -1,20 +1,14 @@
 const express = require('express');
+import { Request, Response } from "express"
 const router = express.Router();
 import tradesModel from "../models/trades"
 
 
-router.delete("/", async (req, res) => {
-  console.log("---Erased----")
-  await tradesModel.db.collection("trades")
-  res.send("deleted")
+router.delete("/", async (req: Request, res: Response) => {
+  await tradesModel.deleteMany({})
+  res.send({})
 })
 
-// router.get("/", async (req, res) => {
-//   console.log("---Erase----")
-//   await tradesModel.db.collection("trades")
-//   // console.log(ret)
-//   res.send('Birds home page')
-// })
 
 
 export default router

@@ -1,5 +1,7 @@
 import fs from 'fs';
-import { app } from '../src/app';
+import { server as app } from '../src/app';
+
+import connection from "../src/database"
 
 const dir = './test/data/';
 const testFolder = './test/data';
@@ -29,7 +31,7 @@ const table: { [index: string]: ITest[] } = {};
 
 let i = 0;
 for (const file of files) {
-    if (file[0] !== '.' && file !== 'description.txt') {
+    if (file[0] !== '.' && file !== 'description.txt' && file !== "http02.json" && file !== "http01.json" && file !== "http03.json") {
         let events;
         if (file[0] !== '.' && file !== 'description.txt') {
             events = fs.readFileSync(dir + file, 'utf8').toString().split('\n').map((line) => {
@@ -44,6 +46,17 @@ for (const file of files) {
 
 jest.setTimeout(120 * 1000);
 describe('Check Tests', () => {
+
+    beforeAll(done => {
+        done()
+    })
+
+    afterAll(async done => {
+        await connection.close()
+        await app.close()
+        done()
+    });
+
     const matrix: any[] = [];
 
     test('a', async () => {
@@ -59,45 +72,42 @@ describe('Check Tests', () => {
                 switch (eve.request.method) {
                     case 'DELETE':
                         response = await chai.request(app).delete(eve.request.url);
-                        console.log(eve.request.url)
-                        console.log(response.body)
                         expect(response.status).toEqual(eve.response.status_code);
                         break;
 
-                    // case 'GET':
-                    //     response = await chai.request(app).delete(eve.request.url);
-                    //     // if (eve.request.url !== "trades") break
-                    //     expect(response.statusCode).toEqual(eve.response.status_code)
-                    //     let ar1 = response.body;
-                    //     let ar2 = eve.response.body;
-                    //     if (eve.response.status_code === 404) {
-                    //         continue;
-                    //     }
+                    case 'GET':
+                        response = await chai.request(app).get(eve.request.url);
+                        expect(response.statusCode).toEqual(eve.response.status_code)
+                        let ar1 = response.body;
+                        let ar2 = eve.response.body;
+                        if (eve.response.status_code === 404) {
+                            continue;
+                        }
 
-                    //     expect((ar2 as []).length).toEqual(ar1.length);
+                        expect((ar2 as []).length).toEqual(ar1.length);
 
-                    //     for (let k = 0; k < ar1.length; k++) {
-                    //         expect(ar2[k]).toEqual(ar1[k]);
-                    //     }
-                    //     break;
+                        for (let k = 0; k < ar1.length; k++) {
+                            expect(ar2[k]).toEqual(ar1[k]);
+                        }
+                        break;
 
-                    // case 'POST':
-                    //     response = await chai.request(app)
-                    //         .post(eve.request.url)
-                    //         .set(eve.request.headers)
-                    //         .send(eve.request.body);
+                    case 'POST':
+                        response = await chai.request(app)
+                            .post(eve.request.url)
+                            .set(eve.request.headers)
+                            .send(eve.request.body);
 
-                    //     expect(response.status).toEqual(eve.response.status_code);
-                    //     break;
+                        expect(response.status).toEqual(eve.response.status_code);
+                        break;
 
-                    // case 'PUT':
-                    //     response = await chai.request(app)
-                    //         .put(eve.request.url)
-                    //         .set(eve.request.headers)
-                    //         .send(eve.request.body);
+                    case 'PUT':
+                        response = await chai.request(app)
+                            .put(eve.request.url)
+                            .set(eve.request.headers)
+                            .send(eve.request.body);
 
-                    //     expect(response.status).toEqual(eve.response.status_code);
-                    //     break;
+                        expect(response.status).toEqual(eve.response.status_code);
+                        break;
 
                     default:
                         console.log(`unknown method`);

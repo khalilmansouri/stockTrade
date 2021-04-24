@@ -6,12 +6,15 @@ import expressPinoLogger from 'express-pino-logger';
 import path from 'path';
 import pino from 'pino';
 import { indexRouter } from './routes';
+import erase from "./routes/erase"
+import trades from "./routes/trades"
+import stocks from "./routes/stocks"
 
 const logger = pino({});
-
 const app = express();
 const port = 8080;
-// require("./mongodb")
+
+require("./database")
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,13 +27,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', indexRouter);
-import erase from "./routes/erase"
-import trades from "./routes/trades"
 
 app.use('/erase', erase);
 app.use('/trades', trades);
-
-//app.use('/stocks', stocks);
+app.use('/stocks', stocks);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -65,6 +65,6 @@ app.addListener('error', (error) => {
 });
 
 
-app.listen(port, () => logger.info(`Example app listening at http://localhost:${port}`))
+let server = app.listen(port, () => logger.info(`Example app listening at http://localhost:${port}`))
 
-export { app };
+export { server };

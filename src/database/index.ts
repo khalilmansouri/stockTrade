@@ -37,13 +37,15 @@ class Connection extends EventEmitter {
       console.log(`Connected to database`);
     });
     this._connection.on("error", error => {
-      console.log(`Connect to ${this._options.name} database failed. ${error.message}`);
+      console.log(`Connecting to database failed. ${error.message}`);
     });
     this._connection.on("disconnected", () => {
-      console.log(`Connect to ${this._options.name} database disconnected`);
+      console.log(`Database disconnected`);
     });
     this._connection.on("disconnecting", error => {
-      console.log(`Connect to ${this._options.name} database is disconnecting. ${error.message}`);
+      if (error) console.log(error)
+      else
+        console.log(`Database is disconnecting ...`);
     });
   }
 

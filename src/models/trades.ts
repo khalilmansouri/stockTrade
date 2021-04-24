@@ -22,6 +22,8 @@ export interface ITrade extends Document {
 
   // price
   price: number
+
+  timestamp: string
 }
 
 
@@ -45,9 +47,16 @@ const TradeSchema: Schema = new Schema({
   shares: { type: Number, required: true },
 
   // price
-  price: { type: Number, required: true }
-});
+  price: { type: Number, required: true },
 
-// export default mongoose.model('trades', TradeSchema);
+  timestamp: { type: String, required: true }
+
+}, { versionKey: false });
+
+
+TradeSchema.index({ id: 1 }, { unique: true })
+TradeSchema.index({ symbol: 1 })
+TradeSchema.index({ price: 1 })
+TradeSchema.index({ timestamp: 1 })
 
 export default connection.model<ITrade>("trades", TradeSchema);
