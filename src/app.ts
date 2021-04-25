@@ -1,17 +1,10 @@
-// import Boom from '@hapi/boom';
 import bodyParser from 'body-parser';
-// import cookieParser from 'cookie-parser';
 import express from 'express';
-// import expressPinoLogger from 'express-pino-logger';
-import path from 'path';
-import pino from 'pino';
-// import { indexRouter } from './routes';
 import erase from "./routes/erase"
 import trades from "./routes/trades"
 import stocks from "./routes/stocks"
 import mongoose from "mongoose"
 
-const logger = pino({});
 const app = express();
 const port = 8080;
 
@@ -62,7 +55,7 @@ let server
         useNewUrlParser: true,
         useCreateIndex: true,
         useUnifiedTopology: true,
-        poolSize: 100
+        // poolSize: 5
     })
     console.log("Connected to db.");
     server = app.listen(port, () => {

@@ -1,6 +1,7 @@
 import { Schema, Document } from 'mongoose';
 import mongoose from 'mongoose';
 import connection from "../database"
+import moment from "moment"
 
 export interface ITrade extends Document {
   // trade unque ID
@@ -22,9 +23,9 @@ export interface ITrade extends Document {
   shares: number,
 
   // price
-  price: number
+  price: number,
 
-  timestamp: string
+  timestamp: Date
 }
 
 
@@ -50,7 +51,7 @@ const TradeSchema: Schema = new Schema({
   // price
   price: { type: Number, required: true },
 
-  timestamp: { type: String, required: true }
+  timestamp: { type: Date, required: true }
 
 }, { versionKey: false });
 

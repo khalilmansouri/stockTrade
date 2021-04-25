@@ -30,12 +30,11 @@ const table: { [index: string]: ITest[] } = {};
 
 let i = 0;
 for (const file of files) {
-    if (["http03.json"].includes(file)) { //"http00.json", "http01.json", "http02.json",
-        console.log({ file })
+    if (["http00.json", "http01.json"].includes(file)) { // , "http01.json", "", "http03.json"
         let events = fs.readFileSync(dir + file, 'utf8').toString().split('\n').map((line) => {
             return (!!line) ? JSON.parse(line) : undefined;
         }).filter(value => !!value);
-        table[testCaseNames[3]] = events;
+        table[testCaseNames[i]] = events;
         i++;
     }
 }
@@ -57,10 +56,8 @@ describe('Check Tests', () => {
 
 
     const entries = Object.entries(table);
-    console.log(entries)
     for (const [testCase, requests] of entries) {
         test(testCase, async () => {
-            console.log({ testCase })
             for (const eve of requests) {
                 let response;
 
