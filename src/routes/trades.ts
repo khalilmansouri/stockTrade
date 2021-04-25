@@ -9,7 +9,6 @@ import tradesModel from "../models/trades"
 router.post("/", async (req: Request, res: Response) => {
   let tra = req.body
   const trade = await tradesModel.findOne({ id: tra.id })
-  console.log("post")
   if (trade) return res.sendStatus(400)
   else {
     // check fluctuation
