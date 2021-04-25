@@ -1,16 +1,13 @@
-const express = require('express');
-import { Request, Response } from "express"
+import * as express from "express";
+import { Request, Response } from "express";
+import tradesModel from "../models/trades";
 const router = express.Router();
-import tradesModel from "../models/trades"
 
-
+// 1- Erasing all the trades
 router.delete("/", async (req: Request, res: Response) => {
-  console.log("Erase")
-  await tradesModel.deleteMany({})
-  return res.send({})
-})
+	console.log("Erase");
+	await tradesModel.deleteMany({});
+	return res.send({});
+});
 
-
-
-export default router
-
+export default router;
