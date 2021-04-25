@@ -9,6 +9,7 @@ import tradesModel from "../models/trades"
 router.post("/", async (req: Request, res: Response) => {
   let tra = req.body
   const trade = await tradesModel.findOne({ id: tra.id })
+  console.log("post")
   if (trade) return res.sendStatus(400)
   else {
     // check fluctuation
@@ -58,14 +59,14 @@ router.get("/", async (req: Request, res: Response) => {
 router.get("/users/:userID", async (req: Request, res: Response) => {
   let { userID } = req.params
   // const ret = await tradesModel.find({ "user.id": userID }).select("-_id")
-  const ret = await tradesModel.aggregate().match({ "user.id": userID }).project({
+  const ret = await tradesModel.aggregate().match({ "user.id": parseInt(userID) }).project({
     _id: 0,
     id: 1, price: 1, user: 1, type: 1, shares: 1, symbol: 1,
     timestamp: { $dateToString: { format: "%Y-%m-%d %H:%M:%S", date: "$timestamp", timezone: "+01" } },
   }).sort({ id: 1 })
-  if (ret.length === 0) res.sendStatus(404)
+  if (ret.length === 0) return res.sendStatus(404)
   else
-    res.send(ret)
+    return res.send(ret)
 })
 
 export default router

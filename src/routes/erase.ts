@@ -5,6 +5,7 @@ import tradesModel from "../models/trades"
 
 
 router.delete("/", async (req: Request, res: Response) => {
+  console.log("Erase")
   await tradesModel.deleteMany({})
   return res.send({})
 })
