@@ -4,6 +4,7 @@ import {EventEmitter} from "events";
 
 // mongodb database credentials
 const	DB_URI = process.env.DB_URI || "mongodb://localhost:27017/stock";
+console.log(DB_URI)
 // an event emitter class represent mongoose connection behavior
 class MongoDB extends EventEmitter {
 	constructor() {

@@ -1,5 +1,5 @@
 import express from "express";
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 import morgan from "morgan"
 import erase from "@routes/erase";
 import trades from "@routes/trades";
@@ -7,9 +7,10 @@ import stocks from "@routes/stocks";
 import errorHandler from "@middleware/errorHandler";
 import mongodb from "./database/mongo"
 
-dotenv.config()
+dotenv.config({path: __dirname+'/.env'})
+console.log(__dirname)
 const app = express();
-const port = 8080;
+const port = process.env.POST || 8080;
 
 app.use(morgan("dev"))
 app.use(express.json({ limit: "5mb" }));
