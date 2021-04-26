@@ -9,6 +9,7 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
+        mongodb-version: [4.4]
 
     steps:
       - uses: actions/checkout@v2
@@ -16,7 +17,11 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{matrix.node-version}}
-      - name: Setting up mongo
-        run: docker run -p 27017:27017 --name mongodb bitnami/mongodb:latest && docker ps -a
+
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.3.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+
       - run: npm install
       - run: npm run test
