@@ -1,5 +1,7 @@
 	import tradesModel, { ITrade } from "@models/trades"
 	import {Model} from "mongoose";
+
+
 	class TradesController {
 
 	model : Model<ITrade>
@@ -38,7 +40,7 @@
 					$dateToString: {
 						format: "%Y-%m-%d %H:%M:%S",
 						date: "$timestamp",
-						timezone: "+01"
+						timezone: this.getTimeZoneOffset()
 					}
 				}
 			})
@@ -60,7 +62,7 @@
 					$dateToString: {
 						format: "%Y-%m-%d %H:%M:%S",
 						date: "$timestamp",
-						timezone: "+01"
+						timezone: this.getTimeZoneOffset()
 					}
 				}
 			})
@@ -73,6 +75,15 @@
 	 */
 	async erase(){
 		await this.model.deleteMany()
+	}
+
+
+	getTimeZoneOffset(): string{
+		const date = new Date();
+		let zone = date.getTimezoneOffset()/60
+		const s = "00" + Math.abs(zone);
+		let sign = zone < 0 ? "+":"-";
+		return  sign.concat(s.substr(s.length-2));
 	}
 
 }
