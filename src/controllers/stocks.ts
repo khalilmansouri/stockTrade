@@ -1,4 +1,4 @@
-import tradesModel, { ITrade } from "../models/trades";
+import tradesModel, { ITrade } from "@models/trades";
 import {Model} from "mongoose";
 import moment from "moment"
 
@@ -25,11 +25,11 @@ class StockController {
    */ 
 
   async getMinMaxPrice({symbol, startDate, endDate}:{symbol :string, startDate: Date, endDate: Date}):Promise<any> {
-		const max = await tradesModel
+		const max = await this.model
 			.findOne({ symbol, timestamp: { $gte: startDate, $lte: endDate } })
 			.sort({ price: 1 })
 			.limit(1);
-		const min = await tradesModel
+		const min = await this.model
 			.findOne({ symbol, timestamp: { $gte: startDate, $lte: endDate } })
 			.sort({ price: -1 })
 			.limit(1);
@@ -48,7 +48,7 @@ class StockController {
   async getfluctuations({ start, end}:{ start: Date, end: Date}):Promise<any> {
 
 
-		const groupedTransaction = await tradesModel.aggregate()
+		const groupedTransaction = await this.model.aggregate()
 		// 1- Get all transaction at the given period 
 		.match({ timestamp: { $gte: new Date(start), $lte: new Date(moment(end).add(1, "day").toString())}})
 		// 2- sort them by symbol and timestamp: to be fast for later grouping
@@ -116,7 +116,7 @@ class StockController {
 			fluctuations.push(fuc);
 		});
 		// Get the orderd list of all the stock symbols 
-		const totalStock = await tradesModel
+		const totalStock = await this.model
 			.aggregate()
 			.sort({ symbol: 1 })
 			.group({ _id: "$symbol", symbol: { $first: "$symbol" } });

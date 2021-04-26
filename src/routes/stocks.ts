@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
-import tradesModel from "../models/trades";
-import StockController from "../controllers/stocks";
+import tradesModel from "@models/trades";
+import StockController from "@controllers/stocks";
 const router = express.Router();
 
 // Returning the highest and lowest price for the stock symbol in the given date range

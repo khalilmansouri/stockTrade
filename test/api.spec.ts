@@ -30,11 +30,11 @@ const table: { [index: string]: ITest[] } = {};
 jest.setTimeout(60*1000)
 let i = 0;
 for (const file of files) {
-    if (["http03.json"].includes(file)) { // , "http01.json", "", "http03.json" "http02.json", "http03.json"
+    if (["http00.json", "http01.json","http02.json","http03.json"].includes(file)) { // , "http01.json", "", "http03.json" "http02.json", "http03.json"
         let events = fs.readFileSync(dir + file, 'utf8').toString().split('\n').map((line) => {
             return (!!line) ? JSON.parse(line) : undefined;
         }).filter(value => !!value);
-        table[testCaseNames[3]] = events;
+        table[testCaseNames[i]] = events;
         i++;
     }
 }

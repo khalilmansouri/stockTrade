@@ -1,4 +1,4 @@
-	import tradesModel, { ITrade } from "../models/trades";
+	import tradesModel, { ITrade } from "@models/trades"
 	import {Model} from "mongoose";
 	class TradesController {
 
@@ -11,7 +11,7 @@
 	 * @param trade the Trade to be inserted 
 	 */
 	async create(trade: ITrade){
-		await tradesModel.create(trade);
+		await this.model.create(trade);
 	}
 
 	/**
@@ -20,7 +20,7 @@
 	 * @returns  Trade
 	 */
 	async findById(id: number) :Promise<ITrade|null>{
-		return await tradesModel.findOne({id});
+		return await this.model.findOne({id});
 	}
 
 
@@ -31,7 +31,7 @@
 	async getAll():Promise<ITrade[]> {
 		// I've used aggregate insetead of find because of the date format in test
 		// I'm forced to follow to the output of the tested 
-		return await tradesModel
+		return await this.model
 			.aggregate()
 			.project({_id: 0, id: 1, price: 1, user: 1, type: 1,shares: 1, symbol: 1,
 				timestamp: {
@@ -52,7 +52,7 @@
 	async getByUser(id: number):Promise<ITrade[]> {
 		// I've used aggregate insetead of find because of the date format in test
 		// I'm forced to follow to the output of the test files
-		return await tradesModel
+		return await this.model
 			.aggregate()
 			.match({ "user.id": id })
 			.project({_id: 0, id: 1, price: 1, user: 1, type: 1,shares: 1, symbol: 1,
@@ -67,6 +67,14 @@
 			.sort({ id: 1 });
 	}
 
+
+	/**
+	 * Erase all the trades
+	 */
+	async erase(){
+		await this.model.deleteMany()
 	}
+
+}
 
 	export default new TradesController(tradesModel);

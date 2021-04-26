@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
-import {ITrade} from "../models/trades";
-import TradesController from "../controllers/trades";
-import * as express from "express";
+import express, { Request, Response } from "express";
+import {ITrade} from "@models/trades";
+import TradesController from "@controllers/trades";
 
 const router = express.Router();
 
