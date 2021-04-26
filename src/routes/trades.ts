@@ -1,74 +1,34 @@
 import { Request, Response } from "express";
-import tradesModel from "../models/trades";
+import {ITrade} from "../models/trades";
+import TradesController from "../controllers/trades";
 import * as express from "express";
 const router = express.Router();
 
 //1- Adding new trades
 router.post("/", async (req: Request, res: Response) => {
-	const tra = req.body;
-	const trade = await tradesModel.findOne({ id: tra.id });
-	if (trade) return res.sendStatus(400);
+	const trade = req.body as ITrade;
+	const exist = await TradesController.findById(trade.id);
+	if (exist) return res.sendStatus(400);
 	else {
-		await tradesModel.create(req.body);
+		await TradesController.create(req.body);
 		return res.status(201).send({});
 	}
 });
 
-//3 - Returningallthetrades
-router.get("/", async (req: Request, res: Response) => {
-
-	// const ret = await tradesModel.find().select("-_id").sort({ id: 1 })
-	const ret = await tradesModel
-		.aggregate()
-		.project({
-			_id: 0,
-			id: 1,
-			price: 1,
-			user: 1,
-			type: 1,
-			shares: 1,
-			symbol: 1,
-			timestamp: {
-				$dateToString: {
-					format: "%Y-%m-%d %H:%M:%S",
-					date: "$timestamp",
-					timezone: "+01"
-				}
-			}
-		})
-		.sort({ id: 1 });
+//3 - Returning all the trades
+router.get("/", async (req: Request, res: Response) => {	
 	res.status(200);
-	res.send(ret);
+	res.send(await	TradesController.getAll());
 });
 
-// 4- ReturningthetraderecordsfilteredbytheuserID:
+// 4- Returning the trade records filtered by theuser ID:
 router.get("/users/:userID", async (req: Request, res: Response) => {
 	const { userID } = req.params;
-	// const ret = await tradesModel.find({ "user.id": userID }).select("-_id")
-	const ret = await tradesModel
-		.aggregate()
-		.match({ "user.id": parseInt(userID) })
-		.project({
-			_id: 0,
-			id: 1,
-			price: 1,
-			user: 1,
-			type: 1,
-			shares: 1,
-			symbol: 1,
-			timestamp: {
-				$dateToString: {
-					format: "%Y-%m-%d %H:%M:%S",
-					date: "$timestamp",
-					timezone: "+01"
-				}
-			}
-		})
-		.sort({ id: 1 });
-	// if no result found return 404
-	if (ret.length === 0) return res.sendStatus(404);
+	// let trades : ITrade[] = [];
+	const trades = await TradesController.getByUser(parseInt(userID));
+	if (trades.length === 0) return res.sendStatus(404);
 	else
-		return res.send(ret);
+		return res.send(trades);
 });
 
 export default router;
