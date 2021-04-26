@@ -1,4 +1,5 @@
 import express from "express";
+import dotenv from 'dotenv';
 import morgan from "morgan"
 import erase from "@routes/erase";
 import trades from "@routes/trades";
@@ -6,6 +7,7 @@ import stocks from "@routes/stocks";
 import errorHandler from "@middleware/errorHandler";
 import mongodb from "./database/mongo"
 
+dotenv.config()
 const app = express();
 const port = 8080;
 

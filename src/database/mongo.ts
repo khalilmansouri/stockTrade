@@ -31,7 +31,7 @@ class MongoDB extends EventEmitter {
 
 	async Init(){
 		if (!DB_URI) throw new Error("Database uri is missing");
-		await mongoose.connect(DB_URI,{ useNewUrlParser: true ,useUnifiedTopology: true });
+		await mongoose.connect(DB_URI,{ useNewUrlParser: true ,useUnifiedTopology: true, useCreateIndex: true });
 	}
 }
 

@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "prestart": "npm install",
-    "app": "ts-node -r tsconfig-paths/register src/app.ts",
-    "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' -r tsconfig-paths/register src/app.ts",
+    "dev": "ts-node -r tsconfig-paths/register src/app.ts",
+    "dev:nodemon": "nodemon --watch './**/*.ts' --exec 'ts-node' -r tsconfig-paths/register src/app.ts",
     "pretest": "tsc -p .",
-    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register build/app.js",
+    "prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register build/app.js",
     "test": "NO_LOGS=true jest test",
     "eslint-fix": "eslint --fix \"src/**/*.ts\""
   },
@@ -20,6 +20,7 @@
     "chai-http": "^4.3.0",
     "cookie-parser": "~1.4.5",
     "debug": "~4.1.1",
+    "dotenv": "^8.2.0",
     "express": "~4.17.1",
     "express-async-handler": "^1.1.4",
     "express-pino-logger": "^5.0.0",
