@@ -1,4 +1,4 @@
 Erase, Create, and Get all trades
 Get trades by user id
-Returning the trade records filtered by theuserID
-Get stock fluctuations
+Get the highest/lowest price for the stock the given date range
+Get stock fluctuations, max rise, max fall

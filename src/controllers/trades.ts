@@ -1,30 +1,33 @@
-import tradesModel, { ITrade } from "../models/trades";
-class TradesController {
+	import tradesModel, { ITrade } from "../models/trades";
+	import {Model} from "mongoose";
+	class TradesController {
 
-
-
+	model : Model<ITrade>
+	constructor(model : Model<ITrade>){
+		this.model = model;
+	}
 	/**
-   * Create new Trade 
-   * @param trade the Trade to be inserted 
-   */
+	 * Create new Trade 
+	 * @param trade the Trade to be inserted 
+	 */
 	async create(trade: ITrade){
 		await tradesModel.create(trade);
 	}
 
 	/**
-   * Find Trade by Id 
-   * @param id Trade id
-   * @returns  Trade
-   */
+	 * Find Trade by Id 
+	 * @param id Trade id
+	 * @returns  Trade
+	 */
 	async findById(id: number) :Promise<ITrade|null>{
 		return await tradesModel.findOne({id});
 	}
-  
+
 
 	/**
-   * Get all trades
-   * @returns Promise<ITrade[]>
-   */ 
+	 * Get all trades
+	 * @returns Promise<ITrade[]>
+	 */ 
 	async getAll():Promise<ITrade[]> {
 		// I've used aggregate insetead of find because of the date format in test
 		// I'm forced to follow to the output of the tested 
@@ -43,9 +46,9 @@ class TradesController {
 	}
 
 	/**
-   * Get trades records by user id
-   * @returns Promise<ITrade[]>
-   */ 
+	 * Get trades records by user id
+	 * @returns Promise<ITrade[]>
+	 */ 
 	async getByUser(id: number):Promise<ITrade[]> {
 		// I've used aggregate insetead of find because of the date format in test
 		// I'm forced to follow to the output of the test files
@@ -64,6 +67,6 @@ class TradesController {
 			.sort({ id: 1 });
 	}
 
-}
+	}
 
-export default new TradesController();
+	export default new TradesController(tradesModel);
