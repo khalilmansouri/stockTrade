@@ -4,7 +4,7 @@
 
 The API uses the provided template along with mongodb as database,
 
-All endpoint are implemented and passed the test
+All endpoint are implemented and passed the test [Here](https://github.com/khalilmansouri/stockTrade/actions)
 
 in some endpoint, Due the `timestamp` date format in test data file, I've been forced to use aggregate() to update date format to match the provided format in test data files, otherwise the tests won't pass
 
@@ -18,6 +18,8 @@ Run test suites
 
 `npm run test`
 
-## missing steps
+## missing steps due time
 
 - Data validation : Injected data in endpoint is not validated yet
+- Reoginse the code to be more extensible
+- Separate express(framework) logic from APIs logic logic
