@@ -1,5 +1,7 @@
 # Stock trade APIs
 
+[![Test Status](https://github.com/khalilmansouri/stocktrade/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/khalilmansouri/stockTrade/actions)
+
 The API uses the provided template along with mongodb as database,
 
 All endpoint are implemented and passed the test
