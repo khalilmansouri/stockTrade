@@ -7,7 +7,7 @@
     "app": "ts-node -r tsconfig-paths/register src/app.ts",
     "dev": "nodemon --watch './**/*.ts' --exec 'ts-node' -r tsconfig-paths/register src/app.ts",
     "pretest": "tsc -p .",
-    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register build/app.ts",
+    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register build/app.js",
     "test": "NO_LOGS=true jest test",
     "eslint-fix": "eslint --fix \"src/**/*.ts\""
   },
@@ -27,7 +27,7 @@
     "lodash": "^4.17.19",
     "moment": "^2.29.1",
     "mongoose": "^5.12.5",
-    "morgan": "~1.10.0",
+    "morgan": "^1.10.0",
     "pino": "^6.5.0",
     "pino-express": "^1.1.1",
     "serve-favicon": "~2.5.0",
